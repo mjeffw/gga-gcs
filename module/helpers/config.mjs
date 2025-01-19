@@ -1,4 +1,4 @@
-export const GGAGCS = {};
+export const GGAGCS = {}
 
 /**
  * The set of Ability Scores used within the system.
@@ -11,7 +11,7 @@ GGAGCS.abilities = {
   int: 'GGAGCS.Ability.Int.long',
   wis: 'GGAGCS.Ability.Wis.long',
   cha: 'GGAGCS.Ability.Cha.long',
-};
+}
 
 GGAGCS.abilityAbbreviations = {
   str: 'GGAGCS.Ability.Str.abbr',
@@ -20,4 +20,4 @@ GGAGCS.abilityAbbreviations = {
   int: 'GGAGCS.Ability.Int.abbr',
   wis: 'GGAGCS.Ability.Wis.abbr',
   cha: 'GGAGCS.Ability.Cha.abbr',
-};
+}

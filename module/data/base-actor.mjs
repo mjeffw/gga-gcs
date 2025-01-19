@@ -1,11 +1,10 @@
-export default class GgaGcsActorBase extends foundry.abstract
-  .TypeDataModel {
-  static LOCALIZATION_PREFIXES = ["GGAGCS.Actor.base"];
+export default class GgaGcsActorBase extends foundry.abstract.TypeDataModel {
+  static LOCALIZATION_PREFIXES = ['GGAGCS.Actor.base']
 
   static defineSchema() {
-    const fields = foundry.data.fields;
-    const requiredInteger = { required: true, nullable: false, integer: true };
-    const schema = {};
+    const fields = foundry.data.fields
+    const requiredInteger = { required: true, nullable: false, integer: true }
+    const schema = {}
 
     schema.health = new fields.SchemaField({
       value: new fields.NumberField({
@@ -14,13 +13,13 @@ export default class GgaGcsActorBase extends foundry.abstract
         min: 0,
       }),
       max: new fields.NumberField({ ...requiredInteger, initial: 10 }),
-    });
+    })
     schema.power = new fields.SchemaField({
       value: new fields.NumberField({ ...requiredInteger, initial: 5, min: 0 }),
       max: new fields.NumberField({ ...requiredInteger, initial: 5 }),
-    });
-    schema.biography = new fields.HTMLField();
+    })
+    schema.biography = new fields.HTMLField()
 
-    return schema;
+    return schema
   }
 }

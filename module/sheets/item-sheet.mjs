@@ -1,17 +1,15 @@
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareActiveEffectCategories } from '../helpers/effects.mjs'
 
-const { api, sheets } = foundry.applications;
+const { api, sheets } = foundry.applications
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheetV2}
  */
-export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
-  sheets.ItemSheetV2
-) {
+export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(sheets.ItemSheetV2) {
   constructor(options = {}) {
-    super(options);
-    this.#dragDrop = this.#createDragDropHandlers();
+    super(options)
+    this.#dragDrop = this.#createDragDropHandlers()
   }
 
   /** @override */
@@ -29,7 +27,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
-  };
+  }
 
   /* -------------------------------------------- */
 
@@ -46,8 +44,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
       template: 'systems/gga-gcs/templates/item/description.hbs',
     },
     attributesFeature: {
-      template:
-        'systems/gga-gcs/templates/item/attribute-parts/feature.hbs',
+      template: 'systems/gga-gcs/templates/item/attribute-parts/feature.hbs',
     },
     attributesGear: {
       template: 'systems/gga-gcs/templates/item/attribute-parts/gear.hbs',
@@ -58,26 +55,26 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
     effects: {
       template: 'systems/gga-gcs/templates/item/effects.hbs',
     },
-  };
+  }
 
   /** @override */
   _configureRenderOptions(options) {
-    super._configureRenderOptions(options);
+    super._configureRenderOptions(options)
     // Not all parts always render
-    options.parts = ['header', 'tabs', 'description'];
+    options.parts = ['header', 'tabs', 'description']
     // Don't show the other tabs if only limited view
-    if (this.document.limited) return;
+    if (this.document.limited) return
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'feature':
-        options.parts.push('attributesFeature', 'effects');
-        break;
+        options.parts.push('attributesFeature', 'effects')
+        break
       case 'gear':
-        options.parts.push('attributesGear');
-        break;
+        options.parts.push('attributesGear')
+        break
       case 'spell':
-        options.parts.push('attributesSpell');
-        break;
+        options.parts.push('attributesSpell')
+        break
     }
   }
 
@@ -102,9 +99,9 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
       // Necessary for formInput and formFields helpers
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
-    };
+    }
 
-    return context;
+    return context
   }
 
   /** @override */
@@ -114,31 +111,28 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
       case 'attributesGear':
       case 'attributesSpell':
         // Necessary for preserving active tab on re-render
-        context.tab = context.tabs[partId];
-        break;
+        context.tab = context.tabs[partId]
+        break
       case 'description':
-        context.tab = context.tabs[partId];
+        context.tab = context.tabs[partId]
         // Enrich description info for display
         // Enrichment turns text like `[[/r 1d20]]` into buttons
-        context.enrichedDescription = await TextEditor.enrichHTML(
-          this.item.system.description,
-          {
-            // Whether to show secret blocks in the finished html
-            secrets: this.document.isOwner,
-            // Data to fill in for inline rolls
-            rollData: this.item.getRollData(),
-            // Relative UUID resolution
-            relativeTo: this.item,
-          }
-        );
-        break;
+        context.enrichedDescription = await TextEditor.enrichHTML(this.item.system.description, {
+          // Whether to show secret blocks in the finished html
+          secrets: this.document.isOwner,
+          // Data to fill in for inline rolls
+          rollData: this.item.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.item,
+        })
+        break
       case 'effects':
-        context.tab = context.tabs[partId];
+        context.tab = context.tabs[partId]
         // Prepare active effects for easier access
-        context.effects = prepareActiveEffectCategories(this.item.effects);
-        break;
+        context.effects = prepareActiveEffectCategories(this.item.effects)
+        break
     }
-    return context;
+    return context
   }
 
   /**
@@ -149,9 +143,9 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    */
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
-    const tabGroup = 'primary';
+    const tabGroup = 'primary'
     // Default tab for first time it's rendered this session
-    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'description';
+    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'description'
     return parts.reduce((tabs, partId) => {
       const tab = {
         cssClass: '',
@@ -162,30 +156,30 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
         icon: '',
         // Run through localization
         label: 'GGAGCS.Item.Tabs.',
-      };
+      }
       switch (partId) {
         case 'header':
         case 'tabs':
-          return tabs;
+          return tabs
         case 'description':
-          tab.id = 'description';
-          tab.label += 'Description';
-          break;
+          tab.id = 'description'
+          tab.label += 'Description'
+          break
         case 'attributesFeature':
         case 'attributesGear':
         case 'attributesSpell':
-          tab.id = 'attributes';
-          tab.label += 'Attributes';
-          break;
+          tab.id = 'attributes'
+          tab.label += 'Attributes'
+          break
         case 'effects':
-          tab.id = 'effects';
-          tab.label += 'Effects';
-          break;
+          tab.id = 'effects'
+          tab.label += 'Effects'
+          break
       }
-      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
-      tabs[partId] = tab;
-      return tabs;
-    }, {});
+      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active'
+      tabs[partId] = tab
+      return tabs
+    }, {})
   }
 
   /**
@@ -196,7 +190,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   _onRender(context, options) {
-    this.#dragDrop.forEach((d) => d.bind(this.element));
+    this.#dragDrop.forEach(d => d.bind(this.element))
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -218,22 +212,20 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } =
-      this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ??
-      {};
+    const attr = target.dataset.edit
+    const current = foundry.utils.getProperty(this.document, attr)
+    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {}
     const fp = new FilePicker({
       current,
       type: 'image',
       redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
+      callback: path => {
+        this.document.update({ [attr]: path })
       },
       top: this.position.top + 40,
       left: this.position.left + 10,
-    });
-    return fp.browse();
+    })
+    return fp.browse()
   }
 
   /**
@@ -245,8 +237,8 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _viewEffect(event, target) {
-    const effect = this._getEffect(target);
-    effect.sheet.render(true);
+    const effect = this._getEffect(target)
+    effect.sheet.render(true)
   }
 
   /**
@@ -258,8 +250,8 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _deleteEffect(event, target) {
-    const effect = this._getEffect(target);
-    await effect.delete();
+    const effect = this._getEffect(target)
+    await effect.delete()
   }
 
   /**
@@ -272,7 +264,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    */
   static async _createEffect(event, target) {
     // Retrieve the configured document class for ActiveEffect
-    const aeCls = getDocumentClass('ActiveEffect');
+    const aeCls = getDocumentClass('ActiveEffect')
     // Prepare the document creation data by initializing it a default name.
     // As of v12, you can define custom Active Effect subtypes just like Item subtypes if you want
     const effectData = {
@@ -281,19 +273,19 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
         type: target.dataset.type,
         parent: this.item,
       }),
-    };
+    }
     // Loop through the dataset and add it to our effectData
     for (const [dataKey, value] of Object.entries(target.dataset)) {
       // These data attributes are reserved for the action handling
-      if (['action', 'documentClass'].includes(dataKey)) continue;
+      if (['action', 'documentClass'].includes(dataKey)) continue
       // Nested properties require dot notation in the HTML, e.g. anything with `system`
       // An example exists in spells.hbs, with `data-system.spell-level`
       // which turns into the dataKey 'system.spellLevel'
-      foundry.utils.setProperty(effectData, dataKey, value);
+      foundry.utils.setProperty(effectData, dataKey, value)
     }
 
     // Finally, create the embedded document!
-    await aeCls.create(effectData, { parent: this.item });
+    await aeCls.create(effectData, { parent: this.item })
   }
 
   /**
@@ -305,8 +297,8 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _toggleEffect(event, target) {
-    const effect = this._getEffect(target);
-    await effect.update({ disabled: !effect.disabled });
+    const effect = this._getEffect(target)
+    await effect.update({ disabled: !effect.disabled })
   }
 
   /** Helper Functions */
@@ -318,8 +310,8 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @returns {HTMLLIElement} The document's row
    */
   _getEffect(target) {
-    const li = target.closest('.effect');
-    return this.item.effects.get(li?.dataset?.effectId);
+    const li = target.closest('.effect')
+    return this.item.effects.get(li?.dataset?.effectId)
   }
 
   /**
@@ -336,7 +328,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    */
   _canDragStart(selector) {
     // game.user fetches the current user
-    return this.isEditable;
+    return this.isEditable
   }
 
   /**
@@ -347,7 +339,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    */
   _canDragDrop(selector) {
     // game.user fetches the current user
-    return this.isEditable;
+    return this.isEditable
   }
 
   /**
@@ -356,21 +348,21 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   _onDragStart(event) {
-    const li = event.currentTarget;
-    if ('link' in event.target.dataset) return;
+    const li = event.currentTarget
+    if ('link' in event.target.dataset) return
 
-    let dragData = null;
+    let dragData = null
 
     // Active Effect
     if (li.dataset.effectId) {
-      const effect = this.item.effects.get(li.dataset.effectId);
-      dragData = effect.toDragData();
+      const effect = this.item.effects.get(li.dataset.effectId)
+      dragData = effect.toDragData()
     }
 
-    if (!dragData) return;
+    if (!dragData) return
 
     // Set data transfer
-    event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+    event.dataTransfer.setData('text/plain', JSON.stringify(dragData))
   }
 
   /**
@@ -386,21 +378,21 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
-    const item = this.item;
-    const allowed = Hooks.call('dropItemSheetData', item, this, data);
-    if (allowed === false) return;
+    const data = TextEditor.getDragEventData(event)
+    const item = this.item
+    const allowed = Hooks.call('dropItemSheetData', item, this, data)
+    if (allowed === false) return
 
     // Handle different data types
     switch (data.type) {
       case 'ActiveEffect':
-        return this._onDropActiveEffect(event, data);
+        return this._onDropActiveEffect(event, data)
       case 'Actor':
-        return this._onDropActor(event, data);
+        return this._onDropActor(event, data)
       case 'Item':
-        return this._onDropItem(event, data);
+        return this._onDropItem(event, data)
       case 'Folder':
-        return this._onDropFolder(event, data);
+        return this._onDropFolder(event, data)
     }
   }
 
@@ -414,13 +406,12 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropActiveEffect(event, data) {
-    const aeCls = getDocumentClass('ActiveEffect');
-    const effect = await aeCls.fromDropData(data);
-    if (!this.item.isOwner || !effect) return false;
+    const aeCls = getDocumentClass('ActiveEffect')
+    const effect = await aeCls.fromDropData(data)
+    if (!this.item.isOwner || !effect) return false
 
-    if (this.item.uuid === effect.parent?.uuid)
-      return this._onEffectSort(event, effect);
-    return aeCls.create(effect, { parent: this.item });
+    if (this.item.uuid === effect.parent?.uuid) return this._onEffectSort(event, effect)
+    return aeCls.create(effect, { parent: this.item })
   }
 
   /**
@@ -430,35 +421,34 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @param {ActiveEffect} effect
    */
   _onEffectSort(event, effect) {
-    const effects = this.item.effects;
-    const dropTarget = event.target.closest('[data-effect-id]');
-    if (!dropTarget) return;
-    const target = effects.get(dropTarget.dataset.effectId);
+    const effects = this.item.effects
+    const dropTarget = event.target.closest('[data-effect-id]')
+    if (!dropTarget) return
+    const target = effects.get(dropTarget.dataset.effectId)
 
     // Don't sort on yourself
-    if (effect.id === target.id) return;
+    if (effect.id === target.id) return
 
     // Identify sibling items based on adjacent HTML elements
-    const siblings = [];
+    const siblings = []
     for (let el of dropTarget.parentElement.children) {
-      const siblingId = el.dataset.effectId;
-      if (siblingId && siblingId !== effect.id)
-        siblings.push(effects.get(el.dataset.effectId));
+      const siblingId = el.dataset.effectId
+      if (siblingId && siblingId !== effect.id) siblings.push(effects.get(el.dataset.effectId))
     }
 
     // Perform the sort
     const sortUpdates = SortingHelpers.performIntegerSort(effect, {
       target,
       siblings,
-    });
-    const updateData = sortUpdates.map((u) => {
-      const update = u.update;
-      update._id = u.target._id;
-      return update;
-    });
+    })
+    const updateData = sortUpdates.map(u => {
+      const update = u.update
+      update._id = u.target._id
+      return update
+    })
 
     // Perform the update
-    return this.item.updateEmbeddedDocuments('ActiveEffect', updateData);
+    return this.item.updateEmbeddedDocuments('ActiveEffect', updateData)
   }
 
   /* -------------------------------------------- */
@@ -472,7 +462,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropActor(event, data) {
-    if (!this.item.isOwner) return false;
+    if (!this.item.isOwner) return false
   }
 
   /* -------------------------------------------- */
@@ -485,7 +475,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropItem(event, data) {
-    if (!this.item.isOwner) return false;
+    if (!this.item.isOwner) return false
   }
 
   /* -------------------------------------------- */
@@ -499,7 +489,7 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropFolder(event, data) {
-    if (!this.item.isOwner) return [];
+    if (!this.item.isOwner) return []
   }
 
   /** The following pieces set up drag handling and are unlikely to need modification  */
@@ -509,12 +499,12 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @type {DragDrop[]}
    */
   get dragDrop() {
-    return this.#dragDrop;
+    return this.#dragDrop
   }
 
   // This is marked as private because there's no real need
   // for subclasses or external hooks to mess with it directly
-  #dragDrop;
+  #dragDrop
 
   /**
    * Create drag-and-drop workflow handlers for this Application
@@ -522,17 +512,17 @@ export class GgaGcsItemSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   #createDragDropHandlers() {
-    return this.options.dragDrop.map((d) => {
+    return this.options.dragDrop.map(d => {
       d.permissions = {
         dragstart: this._canDragStart.bind(this),
         drop: this._canDragDrop.bind(this),
-      };
+      }
       d.callbacks = {
         dragstart: this._onDragStart.bind(this),
         dragover: this._onDragOver.bind(this),
         drop: this._onDrop.bind(this),
-      };
-      return new DragDrop(d);
-    });
+      }
+      return new DragDrop(d)
+    })
   }
 }

@@ -9,7 +9,7 @@ export class GgaGcsActor extends Actor {
     // the following, in order: data reset (to clear active effects),
     // prepareBaseData(), prepareEmbeddedDocuments() (including active effects),
     // prepareDerivedData().
-    super.prepareData();
+    super.prepareData()
   }
 
   /** @override */
@@ -26,8 +26,8 @@ export class GgaGcsActor extends Actor {
    * is queried and has a roll executed directly from it).
    */
   prepareDerivedData() {
-    const actorData = this;
-    const flags = actorData.flags.ggagcs || {};
+    const actorData = this
+    const flags = actorData.flags.ggagcs || {}
   }
 
   /**
@@ -39,6 +39,6 @@ export class GgaGcsActor extends Actor {
    * but have slightly different data preparation needs.
    */
   getRollData() {
-    return { ...super.getRollData(), ...(this.system.getRollData?.() ?? null) };
+    return { ...super.getRollData(), ...(this.system.getRollData?.() ?? null) }
   }
 }

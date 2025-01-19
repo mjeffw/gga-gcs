@@ -9,7 +9,7 @@ export class GgaGcsItem extends Item {
   prepareData() {
     // As with the actor class, items are documents that can have their data
     // preparation methods overridden (such as prepareBaseData()).
-    super.prepareData();
+    super.prepareData()
   }
 
   /**
@@ -18,15 +18,15 @@ export class GgaGcsItem extends Item {
    */
   getRollData() {
     // Starts off by populating the roll data with a shallow copy of `this.system`
-    const rollData = { ...this.system };
+    const rollData = { ...this.system }
 
     // Quit early if there's no parent actor
-    if (!this.actor) return rollData;
+    if (!this.actor) return rollData
 
     // If present, add the actor's roll data
-    rollData.actor = this.actor.getRollData();
+    rollData.actor = this.actor.getRollData()
 
-    return rollData;
+    return rollData
   }
 
   /**
@@ -35,12 +35,12 @@ export class GgaGcsItem extends Item {
    * @private
    */
   async roll(event) {
-    const item = this;
+    const item = this
 
     // Initialize chat data.
-    const speaker = ChatMessage.getSpeaker({ actor: this.actor });
-    const rollMode = game.settings.get('core', 'rollMode');
-    const label = `[${item.type}] ${item.name}`;
+    const speaker = ChatMessage.getSpeaker({ actor: this.actor })
+    const rollMode = game.settings.get('core', 'rollMode')
+    const label = `[${item.type}] ${item.name}`
 
     // If there's no roll data, send a chat message.
     if (!this.system.formula) {
@@ -49,23 +49,23 @@ export class GgaGcsItem extends Item {
         rollMode: rollMode,
         flavor: label,
         content: item.system.description ?? '',
-      });
+      })
     }
     // Otherwise, create a roll and send a chat message from it.
     else {
       // Retrieve roll data.
-      const rollData = this.getRollData();
+      const rollData = this.getRollData()
 
       // Invoke the roll and submit it to chat.
-      const roll = new Roll(rollData.formula, rollData.actor);
+      const roll = new Roll(rollData.formula, rollData.actor)
       // If you need to store the value first, uncomment the next line.
       // const result = await roll.evaluate();
       roll.toMessage({
         speaker: speaker,
         rollMode: rollMode,
         flavor: label,
-      });
-      return roll;
+      })
+      return roll
     }
   }
 }

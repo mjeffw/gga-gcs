@@ -1,0 +1,11 @@
+{
+  "prettier.experimentalTernaries": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFoldingRangeProvider": "GitHub.copilot",
+  "prettier.configPath": ".prettierrc.json",
+  "prettier.htmlWhitespaceSensitivity": "ignore",
+  "prettier.bracketSameLine": true,
+  "prettier.arrowParens": "avoid",
+  "prettier.printWidth": 120,
+  "prettier.useTabs": false
+}

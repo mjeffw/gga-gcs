@@ -1,17 +1,15 @@
-import { prepareActiveEffectCategories } from '../helpers/effects.mjs';
+import { prepareActiveEffectCategories } from '../helpers/effects.mjs'
 
-const { api, sheets } = foundry.applications;
+const { api, sheets } = foundry.applications
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheetV2}
  */
-export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
-  sheets.ActorSheetV2
-) {
+export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(sheets.ActorSheetV2) {
   constructor(options = {}) {
-    super(options);
-    this.#dragDrop = this.#createDragDropHandlers();
+    super(options)
+    this.#dragDrop = this.#createDragDropHandlers()
   }
 
   /** @override */
@@ -34,7 +32,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
     form: {
       submitOnChange: true,
     },
-  };
+  }
 
   /** @override */
   static PARTS = {
@@ -60,23 +58,23 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
     effects: {
       template: 'systems/gga-gcs/templates/actor/effects.hbs',
     },
-  };
+  }
 
   /** @override */
   _configureRenderOptions(options) {
-    super._configureRenderOptions(options);
+    super._configureRenderOptions(options)
     // Not all parts always render
-    options.parts = ['header', 'tabs', 'biography'];
+    options.parts = ['header', 'tabs', 'biography']
     // Don't show the other tabs if only limited view
-    if (this.document.limited) return;
+    if (this.document.limited) return
     // Control which parts show based on document subtype
     switch (this.document.type) {
       case 'character':
-        options.parts.push('features', 'gear', 'spells', 'effects');
-        break;
+        options.parts.push('features', 'gear', 'spells', 'effects')
+        break
       case 'npc':
-        options.parts.push('gear', 'effects');
-        break;
+        options.parts.push('gear', 'effects')
+        break
     }
   }
 
@@ -101,12 +99,12 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
       // Necessary for formInput and formFields helpers
       fields: this.document.schema.fields,
       systemFields: this.document.system.schema.fields,
-    };
+    }
 
     // Offloading context prep to a helper function
-    this._prepareItems(context);
+    this._prepareItems(context)
 
-    return context;
+    return context
   }
 
   /** @override */
@@ -115,35 +113,32 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
       case 'features':
       case 'spells':
       case 'gear':
-        context.tab = context.tabs[partId];
-        break;
+        context.tab = context.tabs[partId]
+        break
       case 'biography':
-        context.tab = context.tabs[partId];
+        context.tab = context.tabs[partId]
         // Enrich biography info for display
         // Enrichment turns text like `[[/r 1d20]]` into buttons
-        context.enrichedBiography = await TextEditor.enrichHTML(
-          this.actor.system.biography,
-          {
-            // Whether to show secret blocks in the finished html
-            secrets: this.document.isOwner,
-            // Data to fill in for inline rolls
-            rollData: this.actor.getRollData(),
-            // Relative UUID resolution
-            relativeTo: this.actor,
-          }
-        );
-        break;
+        context.enrichedBiography = await TextEditor.enrichHTML(this.actor.system.biography, {
+          // Whether to show secret blocks in the finished html
+          secrets: this.document.isOwner,
+          // Data to fill in for inline rolls
+          rollData: this.actor.getRollData(),
+          // Relative UUID resolution
+          relativeTo: this.actor,
+        })
+        break
       case 'effects':
-        context.tab = context.tabs[partId];
+        context.tab = context.tabs[partId]
         // Prepare active effects
         context.effects = prepareActiveEffectCategories(
           // A generator that returns all effects stored on the actor
           // as well as any items
-          this.actor.allApplicableEffects()
-        );
-        break;
+          this.actor.allApplicableEffects(),
+        )
+        break
     }
-    return context;
+    return context
   }
 
   /**
@@ -154,9 +149,9 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   _getTabs(parts) {
     // If you have sub-tabs this is necessary to change
-    const tabGroup = 'primary';
+    const tabGroup = 'primary'
     // Default tab for first time it's rendered this session
-    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'biography';
+    if (!this.tabGroups[tabGroup]) this.tabGroups[tabGroup] = 'biography'
     return parts.reduce((tabs, partId) => {
       const tab = {
         cssClass: '',
@@ -167,36 +162,36 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
         icon: '',
         // Run through localization
         label: 'GGAGCS.Actor.Tabs.',
-      };
+      }
       switch (partId) {
         case 'header':
         case 'tabs':
-          return tabs;
+          return tabs
         case 'biography':
-          tab.id = 'biography';
-          tab.label += 'Biography';
-          break;
+          tab.id = 'biography'
+          tab.label += 'Biography'
+          break
         case 'features':
-          tab.id = 'features';
-          tab.label += 'Features';
-          break;
+          tab.id = 'features'
+          tab.label += 'Features'
+          break
         case 'gear':
-          tab.id = 'gear';
-          tab.label += 'Gear';
-          break;
+          tab.id = 'gear'
+          tab.label += 'Gear'
+          break
         case 'spells':
-          tab.id = 'spells';
-          tab.label += 'Spells';
-          break;
+          tab.id = 'spells'
+          tab.label += 'Spells'
+          break
         case 'effects':
-          tab.id = 'effects';
-          tab.label += 'Effects';
-          break;
+          tab.id = 'effects'
+          tab.label += 'Effects'
+          break
       }
-      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active';
-      tabs[partId] = tab;
-      return tabs;
-    }, {});
+      if (this.tabGroups[tabGroup] === tab.id) tab.cssClass = 'active'
+      tabs[partId] = tab
+      return tabs
+    }, {})
   }
 
   /**
@@ -209,8 +204,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
     // You can just use `this.document.itemTypes` instead
     // if you don't need to subdivide a given type like
     // this sheet does with spells
-    const gear = [];
-    const features = [];
+    const gear = []
+    const features = []
     const spells = {
       0: [],
       1: [],
@@ -222,34 +217,34 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
       7: [],
       8: [],
       9: [],
-    };
+    }
 
     // Iterate through items, allocating to containers
     for (let i of this.document.items) {
       // Append to gear.
       if (i.type === 'gear') {
-        gear.push(i);
+        gear.push(i)
       }
       // Append to features.
       else if (i.type === 'feature') {
-        features.push(i);
+        features.push(i)
       }
       // Append to spells.
       else if (i.type === 'spell') {
         if (i.system.spellLevel != undefined) {
-          spells[i.system.spellLevel].push(i);
+          spells[i.system.spellLevel].push(i)
         }
       }
     }
 
     for (const s of Object.values(spells)) {
-      s.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+      s.sort((a, b) => (a.sort || 0) - (b.sort || 0))
     }
 
     // Sort then assign
-    context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0));
-    context.spells = spells;
+    context.gear = gear.sort((a, b) => (a.sort || 0) - (b.sort || 0))
+    context.features = features.sort((a, b) => (a.sort || 0) - (b.sort || 0))
+    context.spells = spells
   }
 
   /**
@@ -261,8 +256,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @override
    */
   _onRender(context, options) {
-    this.#dragDrop.forEach((d) => d.bind(this.element));
-    this.#disableOverrides();
+    this.#dragDrop.forEach(d => d.bind(this.element))
+    this.#disableOverrides()
     // You may want to add other special handling here
     // Foundry comes with a large number of utility classes, e.g. SearchFilter
     // That you may want to implement yourself.
@@ -284,22 +279,20 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onEditImage(event, target) {
-    const attr = target.dataset.edit;
-    const current = foundry.utils.getProperty(this.document, attr);
-    const { img } =
-      this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ??
-      {};
+    const attr = target.dataset.edit
+    const current = foundry.utils.getProperty(this.document, attr)
+    const { img } = this.document.constructor.getDefaultArtwork?.(this.document.toObject()) ?? {}
     const fp = new FilePicker({
       current,
       type: 'image',
       redirectToRoot: img ? [img] : [],
-      callback: (path) => {
-        this.document.update({ [attr]: path });
+      callback: path => {
+        this.document.update({ [attr]: path })
       },
       top: this.position.top + 40,
       left: this.position.left + 10,
-    });
-    return fp.browse();
+    })
+    return fp.browse()
   }
 
   /**
@@ -311,8 +304,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _viewDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
-    doc.sheet.render(true);
+    const doc = this._getEmbeddedDocument(target)
+    doc.sheet.render(true)
   }
 
   /**
@@ -324,8 +317,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _deleteDoc(event, target) {
-    const doc = this._getEmbeddedDocument(target);
-    await doc.delete();
+    const doc = this._getEmbeddedDocument(target)
+    await doc.delete()
   }
 
   /**
@@ -338,7 +331,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   static async _createDoc(event, target) {
     // Retrieve the configured document class for Item or ActiveEffect
-    const docCls = getDocumentClass(target.dataset.documentClass);
+    const docCls = getDocumentClass(target.dataset.documentClass)
     // Prepare the document creation data by initializing it a default name.
     const docData = {
       name: docCls.defaultName({
@@ -346,19 +339,19 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
         type: target.dataset.type,
         parent: this.actor,
       }),
-    };
+    }
     // Loop through the dataset and add it to our docData
     for (const [dataKey, value] of Object.entries(target.dataset)) {
       // These data attributes are reserved for the action handling
-      if (['action', 'documentClass'].includes(dataKey)) continue;
+      if (['action', 'documentClass'].includes(dataKey)) continue
       // Nested properties require dot notation in the HTML, e.g. anything with `system`
       // An example exists in spells.hbs, with `data-system.spell-level`
       // which turns into the dataKey 'system.spellLevel'
-      foundry.utils.setProperty(docData, dataKey, value);
+      foundry.utils.setProperty(docData, dataKey, value)
     }
 
     // Finally, create the embedded document!
-    await docCls.create(docData, { parent: this.actor });
+    await docCls.create(docData, { parent: this.actor })
   }
 
   /**
@@ -370,8 +363,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   static async _toggleEffect(event, target) {
-    const effect = this._getEmbeddedDocument(target);
-    await effect.update({ disabled: !effect.disabled });
+    const effect = this._getEmbeddedDocument(target)
+    await effect.update({ disabled: !effect.disabled })
   }
 
   /**
@@ -383,26 +376,26 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   static async _onRoll(event, target) {
-    event.preventDefault();
-    const dataset = target.dataset;
+    event.preventDefault()
+    const dataset = target.dataset
 
     // Handle item rolls.
     switch (dataset.rollType) {
       case 'item':
-        const item = this._getEmbeddedDocument(target);
-        if (item) return item.roll();
+        const item = this._getEmbeddedDocument(target)
+        if (item) return item.roll()
     }
 
     // Handle rolls that supply the formula directly.
     if (dataset.roll) {
-      let label = dataset.label ? `[ability] ${dataset.label}` : '';
-      let roll = new Roll(dataset.roll, this.actor.getRollData());
+      let label = dataset.label ? `[ability] ${dataset.label}` : ''
+      let roll = new Roll(dataset.roll, this.actor.getRollData())
       await roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
         rollMode: game.settings.get('core', 'rollMode'),
-      });
-      return roll;
+      })
+      return roll
     }
   }
 
@@ -415,16 +408,14 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @returns {Item | ActiveEffect} The embedded Item or ActiveEffect
    */
   _getEmbeddedDocument(target) {
-    const docRow = target.closest('li[data-document-class]');
+    const docRow = target.closest('li[data-document-class]')
     if (docRow.dataset.documentClass === 'Item') {
-      return this.actor.items.get(docRow.dataset.itemId);
+      return this.actor.items.get(docRow.dataset.itemId)
     } else if (docRow.dataset.documentClass === 'ActiveEffect') {
       const parent =
-        docRow.dataset.parentId === this.actor.id
-          ? this.actor
-          : this.actor.items.get(docRow?.dataset.parentId);
-      return parent.effects.get(docRow?.dataset.effectId);
-    } else return console.warn('Could not find document class');
+        docRow.dataset.parentId === this.actor.id ? this.actor : this.actor.items.get(docRow?.dataset.parentId)
+      return parent.effects.get(docRow?.dataset.effectId)
+    } else return console.warn('Could not find document class')
   }
 
   /***************
@@ -441,7 +432,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   _canDragStart(selector) {
     // game.user fetches the current user
-    return this.isEditable;
+    return this.isEditable
   }
 
   /**
@@ -452,7 +443,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   _canDragDrop(selector) {
     // game.user fetches the current user
-    return this.isEditable;
+    return this.isEditable
   }
 
   /**
@@ -461,16 +452,16 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   _onDragStart(event) {
-    const docRow = event.currentTarget.closest('li');
-    if ('link' in event.target.dataset) return;
+    const docRow = event.currentTarget.closest('li')
+    if ('link' in event.target.dataset) return
 
     // Chained operation
-    let dragData = this._getEmbeddedDocument(docRow)?.toDragData();
+    let dragData = this._getEmbeddedDocument(docRow)?.toDragData()
 
-    if (!dragData) return;
+    if (!dragData) return
 
     // Set data transfer
-    event.dataTransfer.setData('text/plain', JSON.stringify(dragData));
+    event.dataTransfer.setData('text/plain', JSON.stringify(dragData))
   }
 
   /**
@@ -486,21 +477,21 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
-    const actor = this.actor;
-    const allowed = Hooks.call('dropActorSheetData', actor, this, data);
-    if (allowed === false) return;
+    const data = TextEditor.getDragEventData(event)
+    const actor = this.actor
+    const allowed = Hooks.call('dropActorSheetData', actor, this, data)
+    if (allowed === false) return
 
     // Handle different data types
     switch (data.type) {
       case 'ActiveEffect':
-        return this._onDropActiveEffect(event, data);
+        return this._onDropActiveEffect(event, data)
       case 'Actor':
-        return this._onDropActor(event, data);
+        return this._onDropActor(event, data)
       case 'Item':
-        return this._onDropItem(event, data);
+        return this._onDropItem(event, data)
       case 'Folder':
-        return this._onDropFolder(event, data);
+        return this._onDropFolder(event, data)
     }
   }
 
@@ -512,12 +503,11 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropActiveEffect(event, data) {
-    const aeCls = getDocumentClass('ActiveEffect');
-    const effect = await aeCls.fromDropData(data);
-    if (!this.actor.isOwner || !effect) return false;
-    if (effect.target === this.actor)
-      return this._onSortActiveEffect(event, effect);
-    return aeCls.create(effect, { parent: this.actor });
+    const aeCls = getDocumentClass('ActiveEffect')
+    const effect = await aeCls.fromDropData(data)
+    if (!this.actor.isOwner || !effect) return false
+    if (effect.target === this.actor) return this._onSortActiveEffect(event, effect)
+    return aeCls.create(effect, { parent: this.actor })
   }
 
   /**
@@ -528,56 +518,50 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   async _onSortActiveEffect(event, effect) {
     /** @type {HTMLElement} */
-    const dropTarget = event.target.closest('[data-effect-id]');
-    if (!dropTarget) return;
-    const target = this._getEmbeddedDocument(dropTarget);
+    const dropTarget = event.target.closest('[data-effect-id]')
+    if (!dropTarget) return
+    const target = this._getEmbeddedDocument(dropTarget)
 
     // Don't sort on yourself
-    if (effect.uuid === target.uuid) return;
+    if (effect.uuid === target.uuid) return
 
     // Identify sibling items based on adjacent HTML elements
-    const siblings = [];
+    const siblings = []
     for (const el of dropTarget.parentElement.children) {
-      const siblingId = el.dataset.effectId;
-      const parentId = el.dataset.parentId;
-      if (
-        siblingId &&
-        parentId &&
-        (siblingId !== effect.id || parentId !== effect.parent.id)
-      )
-        siblings.push(this._getEmbeddedDocument(el));
+      const siblingId = el.dataset.effectId
+      const parentId = el.dataset.parentId
+      if (siblingId && parentId && (siblingId !== effect.id || parentId !== effect.parent.id))
+        siblings.push(this._getEmbeddedDocument(el))
     }
 
     // Perform the sort
     const sortUpdates = SortingHelpers.performIntegerSort(effect, {
       target,
       siblings,
-    });
+    })
 
     // Split the updates up by parent document
-    const directUpdates = [];
+    const directUpdates = []
 
     const grandchildUpdateData = sortUpdates.reduce((items, u) => {
-      const parentId = u.target.parent.id;
-      const update = { _id: u.target.id, ...u.update };
+      const parentId = u.target.parent.id
+      const update = { _id: u.target.id, ...u.update }
       if (parentId === this.actor.id) {
-        directUpdates.push(update);
-        return items;
+        directUpdates.push(update)
+        return items
       }
-      if (items[parentId]) items[parentId].push(update);
-      else items[parentId] = [update];
-      return items;
-    }, {});
+      if (items[parentId]) items[parentId].push(update)
+      else items[parentId] = [update]
+      return items
+    }, {})
 
     // Effects-on-items updates
     for (const [itemId, updates] of Object.entries(grandchildUpdateData)) {
-      await this.actor.items
-        .get(itemId)
-        .updateEmbeddedDocuments('ActiveEffect', updates);
+      await this.actor.items.get(itemId).updateEmbeddedDocuments('ActiveEffect', updates)
     }
 
     // Update on the main actor
-    return this.actor.updateEmbeddedDocuments('ActiveEffect', directUpdates);
+    return this.actor.updateEmbeddedDocuments('ActiveEffect', directUpdates)
   }
 
   /**
@@ -589,7 +573,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropActor(event, data) {
-    if (!this.actor.isOwner) return false;
+    if (!this.actor.isOwner) return false
   }
 
   /* -------------------------------------------- */
@@ -602,15 +586,14 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropItem(event, data) {
-    if (!this.actor.isOwner) return false;
-    const item = await Item.implementation.fromDropData(data);
+    if (!this.actor.isOwner) return false
+    const item = await Item.implementation.fromDropData(data)
 
     // Handle item sorting within the same Actor
-    if (this.actor.uuid === item.parent?.uuid)
-      return this._onSortItem(event, item);
+    if (this.actor.uuid === item.parent?.uuid) return this._onSortItem(event, item)
 
     // Create the owned item
-    return this._onDropItemCreate(item, event);
+    return this._onDropItemCreate(item, event)
   }
 
   /**
@@ -622,16 +605,16 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @protected
    */
   async _onDropFolder(event, data) {
-    if (!this.actor.isOwner) return [];
-    const folder = await Folder.implementation.fromDropData(data);
-    if (folder.type !== 'Item') return [];
+    if (!this.actor.isOwner) return []
+    const folder = await Folder.implementation.fromDropData(data)
+    if (folder.type !== 'Item') return []
     const droppedItemData = await Promise.all(
-      folder.contents.map(async (item) => {
-        if (!(document instanceof Item)) item = await fromUuid(item.uuid);
-        return item;
-      })
-    );
-    return this._onDropItemCreate(droppedItemData, event);
+      folder.contents.map(async item => {
+        if (!(document instanceof Item)) item = await fromUuid(item.uuid)
+        return item
+      }),
+    )
+    return this._onDropItemCreate(droppedItemData, event)
   }
 
   /**
@@ -643,8 +626,8 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   async _onDropItemCreate(itemData, event) {
-    itemData = itemData instanceof Array ? itemData : [itemData];
-    return this.actor.createEmbeddedDocuments('Item', itemData);
+    itemData = itemData instanceof Array ? itemData : [itemData]
+    return this.actor.createEmbeddedDocuments('Item', itemData)
   }
 
   /**
@@ -655,35 +638,34 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    */
   _onSortItem(event, item) {
     // Get the drag source and drop target
-    const items = this.actor.items;
-    const dropTarget = event.target.closest('[data-item-id]');
-    if (!dropTarget) return;
-    const target = items.get(dropTarget.dataset.itemId);
+    const items = this.actor.items
+    const dropTarget = event.target.closest('[data-item-id]')
+    if (!dropTarget) return
+    const target = items.get(dropTarget.dataset.itemId)
 
     // Don't sort on yourself
-    if (item.id === target.id) return;
+    if (item.id === target.id) return
 
     // Identify sibling items based on adjacent HTML elements
-    const siblings = [];
+    const siblings = []
     for (let el of dropTarget.parentElement.children) {
-      const siblingId = el.dataset.itemId;
-      if (siblingId && siblingId !== item.id)
-        siblings.push(items.get(el.dataset.itemId));
+      const siblingId = el.dataset.itemId
+      if (siblingId && siblingId !== item.id) siblings.push(items.get(el.dataset.itemId))
     }
 
     // Perform the sort
     const sortUpdates = SortingHelpers.performIntegerSort(item, {
       target,
       siblings,
-    });
-    const updateData = sortUpdates.map((u) => {
-      const update = u.update;
-      update._id = u.target._id;
-      return update;
-    });
+    })
+    const updateData = sortUpdates.map(u => {
+      const update = u.update
+      update._id = u.target._id
+      return update
+    })
 
     // Perform the update
-    return this.actor.updateEmbeddedDocuments('Item', updateData);
+    return this.actor.updateEmbeddedDocuments('Item', updateData)
   }
 
   /** The following pieces set up drag handling and are unlikely to need modification  */
@@ -693,12 +675,12 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @type {DragDrop[]}
    */
   get dragDrop() {
-    return this.#dragDrop;
+    return this.#dragDrop
   }
 
   // This is marked as private because there's no real need
   // for subclasses or external hooks to mess with it directly
-  #dragDrop;
+  #dragDrop
 
   /**
    * Create drag-and-drop workflow handlers for this Application
@@ -706,18 +688,18 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @private
    */
   #createDragDropHandlers() {
-    return this.options.dragDrop.map((d) => {
+    return this.options.dragDrop.map(d => {
       d.permissions = {
         dragstart: this._canDragStart.bind(this),
         drop: this._canDragDrop.bind(this),
-      };
+      }
       d.callbacks = {
         dragstart: this._onDragStart.bind(this),
         dragover: this._onDragOver.bind(this),
         drop: this._onDrop.bind(this),
-      };
-      return new DragDrop(d);
-    });
+      }
+      return new DragDrop(d)
+    })
   }
 
   /********************
@@ -736,20 +718,20 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(
    * @override
    */
   async _processSubmitData(event, form, submitData) {
-    const overrides = foundry.utils.flattenObject(this.actor.overrides);
-    for (let k of Object.keys(overrides)) delete submitData[k];
-    await this.document.update(submitData);
+    const overrides = foundry.utils.flattenObject(this.actor.overrides)
+    for (let k of Object.keys(overrides)) delete submitData[k]
+    await this.document.update(submitData)
   }
 
   /**
    * Disables inputs subject to active effects
    */
   #disableOverrides() {
-    const flatOverrides = foundry.utils.flattenObject(this.actor.overrides);
+    const flatOverrides = foundry.utils.flattenObject(this.actor.overrides)
     for (const override of Object.keys(flatOverrides)) {
-      const input = this.element.querySelector(`[name="${override}"]`);
+      const input = this.element.querySelector(`[name="${override}"]`)
       if (input) {
-        input.disabled = true;
+        input.disabled = true
       }
     }
   }
