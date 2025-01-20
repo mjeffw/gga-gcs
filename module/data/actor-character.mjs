@@ -28,6 +28,14 @@ export default class GgaGcsCharacter extends GgaGcsActorBase {
       }, {}),
     )
 
+    // ====
+
+    schema.settings = new fields.SchemaField({
+      attributes: new fields.ArrayField({
+        
+      }),
+    })
+
     return schema
   }
 

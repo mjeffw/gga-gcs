@@ -3,6 +3,8 @@
   "version": "3.0.0",
   "description": "CSS compiler for the GgaGcs system",
   "scripts": {
+    "test": "jest --coverage",
+    "tdd": "jest --coverage",
     "build": "sass src/scss/gga-gcs.scss css/gga-gcs.css --style=expanded --no-source-map",
     "watch": "sass src/scss/gga-gcs.scss css/gga-gcs.css --style=expanded --source-map --watch"
   },
@@ -13,9 +15,24 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
     "sass": "^1.53.0"
   },
-  "dependencies": {
-    "prettier": "^3.4.2"
+  "jest": {
+    "transform": {
+      "^.+\\.mjs$": "babel-jest"
+    },
+    "testMatch": [
+      "**/?(*.)+(spec|test).mjs?(x)"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
