@@ -56,7 +56,44 @@ describe('Evaluator', () => {
     }
   })
 
-  it.skip('debug', () => {
+  it('should evaluate a simple expression with string result', () => {
+    expect(evaluator.evaluate('(2 * max(3, min(-4, 5) + 2))')).toBe(6)
+  })
+
+  it('debug', () => {
     expect(evaluator.evaluate('foo + bar')).toBe('foobar')
+  })
+
+  // create a test for Evaluator.tokenize
+  it('should tokenize a simple expression', () => {
+    expect(evaluator.tokenize('1 + 1')).toEqual(['1', '+', '1'])
+  })
+
+  it('should tokenize an expression separated by arithmetic operators', () => {
+    expect(evaluator.tokenize('1+1-1')).toEqual(['1', '+', '1', '-', '1'])
+  })
+
+  it('should tokenize "1.3+1.5"', () => {
+    expect(evaluator.tokenize('1.3+1.5')).toEqual(['1.3', '+', '1.5'])
+  })
+
+  it('should tokenize "-4"', () => {
+    expect(evaluator.tokenize('-4')).toEqual(['-4'])
+  })
+
+  it('should tokenize "1.30015"', () => {
+    expect(evaluator.tokenize('1.30015')).toEqual(['1.30015'])
+  })
+
+  it('should tokenize "1.2e-3"', () => {
+    expect(evaluator.tokenize('1.2e-3')).toEqual(['1.2e-3'])
+  })
+
+  it('should tokenize "3-3"', () => {
+    expect(evaluator.tokenize('3-3')).toEqual(['3', '-', '3'])
+  })
+
+  it('should tokenize "sqrt(cbrt(8)-7)"', () => {
+    expect(evaluator.tokenize('sqrt(cbrt(8)-7)')).toEqual(['sqrt', '(', 'cbrt', '(', '8', ')', '-', '7', ')'])
   })
 })
