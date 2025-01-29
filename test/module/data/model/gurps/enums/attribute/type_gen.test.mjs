@@ -1,4 +1,4 @@
-import { Type } from '../../../../../../../module/data/model/gurps/enums/attributes/type_gen.mjs'
+import { Type } from '../../../../../../../module/data/model/gurps/enums/attribute/type_gen.mjs'
 
 describe('Type Enum', () => {
   test('ensureValid returns valid type', () => {

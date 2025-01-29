@@ -1,5 +1,5 @@
-import { Placement } from './enums/attributes/placement_gen.mjs'
-import { Type } from './enums/attributes/type_gen.mjs'
+import { Placement } from './enums/attribute/placement_gen.mjs'
+import { Type } from './enums/attribute/type_gen.mjs'
 import { SkillID, ParryID, BlockID, SizeModifierID, sanitizeID } from './ids.mjs'
 
 const AttributeKind = {
@@ -42,6 +42,10 @@ class AttributeDef {
   }
 
   // UnmarshalJSON implements JSON deserialization.
+  static UnmarshalJSON(data) {
+    return AttributeDef.fromJSON(data)
+  }
+
   static fromJSON(data) {
     const parsedData = JSON.parse(data)
 
@@ -63,6 +67,10 @@ class AttributeDef {
   }
 
   // MarshalJSON implements JSON serialization.
+  MarshalJSON() {
+    return this.toJSON()
+  }
+
   toJSON() {
     return {
       order: this.order,

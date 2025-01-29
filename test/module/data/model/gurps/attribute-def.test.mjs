@@ -1,6 +1,6 @@
 import { AttributeDef } from '../../../../../module/data/model/gurps/attribute-def.mjs'
-import { Type } from '../../../../../module/data/model/gurps/enums/attributes/type_gen.mjs'
-import { Placement } from '../../../../../module/data/model/gurps/enums/attributes/placement_gen.mjs'
+import { Type } from '../../../../../module/data/model/gurps/enums/attribute/type_gen.mjs'
+import { Placement } from '../../../../../module/data/model/gurps/enums/attribute/placement_gen.mjs'
 
 describe('AttributeDef', () => {
   const attributeDefData = {
@@ -80,7 +80,7 @@ describe('AttributeDef', () => {
           "type": "decimal",
           "name": "Name"
         }`
-      const attributeDef = AttributeDef.fromJSON(jsonData)
+      const attributeDef = AttributeDef.UnmarshalJSON(jsonData)
 
       expect(attributeDef).toBeInstanceOf(AttributeDef)
       expect(attributeDef.ID).toBe('someid')
@@ -100,7 +100,7 @@ describe('AttributeDef', () => {
           "placement": "automatic",
           "name": "Name"
         }`
-      const attributeDef = AttributeDef.fromJSON(jsonData)
+      const attributeDef = AttributeDef.UnmarshalJSON(jsonData)
       expect(attributeDef.type).toBe(Type.Integer)
       expect(attributeDef.placement).toBe(Placement.Automatic)
     })
@@ -113,7 +113,7 @@ describe('AttributeDef', () => {
           "placement": "primary",
           "name": "Name"
         }`
-      const attributeDef = AttributeDef.fromJSON(jsonData)
+      const attributeDef = AttributeDef.UnmarshalJSON(jsonData)
       expect(attributeDef.type).toBe(Type.Decimal)
       expect(attributeDef.placement).toBe(Placement.Primary)
     })

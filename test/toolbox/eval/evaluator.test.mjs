@@ -29,6 +29,10 @@ describe('Evaluator', () => {
       expr: '(1 + (2 * max(3, min(-4, 5) + 2) - ((14 - (13 - (12 - (11 - (10 - (9 - (8 - (7 + 6))))))))))) - 10',
       value: -1,
     },
+    { expr: 'abs(-4)', value: 4 },
+    { expr: 'foo + bar', value: 'foobar' },
+    { expr: 'foo +               \n    bar', value: 'foobar' },
+    // { expr: '$other', value: '22 + 2' },
   ]
 
   const strExpr = [{ expr: 'foo + bar', value: 'foobar' }]
