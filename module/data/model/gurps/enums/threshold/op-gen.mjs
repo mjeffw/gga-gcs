@@ -1,4 +1,4 @@
-import { i18n } from '../../../../../helpers/utils.mjs'
+import { i18n } from '../../../../../helpers/i18n.mjs'
 
 // Possible values.
 const Op = {
@@ -42,13 +42,13 @@ Op.Key = function (enumValue) {
 Op.String = function (enumValue) {
   switch (enumValue) {
     case Op.Unknown:
-      return i18n('Unknown')
+      return i18n.Text('Unknown')
     case Op.HalveMove:
-      return i18n('Halve Move')
+      return i18n.Text('Halve Move')
     case Op.HalveDodge:
-      return i18n('Halve Dodge')
+      return i18n.Text('Halve Dodge')
     case Op.HalveST:
-      return i18n('Halve Strength')
+      return i18n.Text('Halve Strength')
     default:
       return Op.String(Op.Unknown)
   }
@@ -58,13 +58,13 @@ Op.String = function (enumValue) {
 Op.AltString = function (enumValue) {
   switch (enumValue) {
     case Op.Unknown:
-      return i18n('Unknown')
+      return i18n.Text('Unknown')
     case Op.HalveMove:
-      return i18n('Halve Move (round up)')
+      return i18n.Text('Halve Move (round up)')
     case Op.HalveDodge:
-      return i18n('Halve Dodge (round up)')
+      return i18n.Text('Halve Dodge (round up)')
     case Op.HalveST:
-      return i18n('Halve Strength (round up; does not affect HP and damage)')
+      return i18n.Text('Halve Strength (round up; does not affect HP and damage)')
     default:
       return Op.AltString(Op.Unknown)
   }

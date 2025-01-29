@@ -1,4 +1,4 @@
-import { i18n } from '../../../../../helpers/utils.mjs'
+import { i18n } from '../../../../../helpers/i18n.mjs'
 
 // Possible values.
 const Placement = {
@@ -42,13 +42,13 @@ Placement.Key = function (enumValue) {
 Placement.String = function (enumValue) {
   switch (enumValue) {
     case Placement.Automatic:
-      return i18n('Automatic')
+      return i18n.Text('Automatic')
     case Placement.Primary:
-      return i18n('Primary')
+      return i18n.Text('Primary')
     case Placement.Secondary:
-      return i18n('Secondary')
+      return i18n.Text('Secondary')
     case Placement.Hidden:
-      return i18n('Hidden')
+      return i18n.Text('Hidden')
     default:
       return Placement.String(0)
   }

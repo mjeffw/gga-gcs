@@ -1,3 +1,5 @@
+import { i18n } from '../../../../../helpers/i18n.mjs'
+
 // Possible values.
 const Type = {
   Integer: 0,
@@ -65,23 +67,23 @@ Type.Key = function (typeEnum) {
 Type.String = function (typeEnum) {
   switch (typeEnum) {
     case Type.Integer:
-      return 'Integer'
+      return i18n.Text('Integer')
     case Type.IntegerRef:
-      return 'Integer (Display Only)'
+      return i18n.Text('Integer (Display Only)')
     case Type.Decimal:
-      return 'Decimal'
+      return i18n.Text('Decimal')
     case Type.DecimalRef:
-      return 'Decimal (Display Only)'
+      return i18n.Text('Decimal (Display Only)')
     case Type.Pool:
-      return 'Pool'
+      return i18n.Text('Pool')
     case Type.PoolRef:
-      return 'Pool (Display Only for Maximum)'
+      return i18n.Text('Pool (Display Only for Maximum)')
     case Type.PrimarySeparator:
-      return 'Primary Separator'
+      return i18n.Text('Primary Separator')
     case Type.SecondarySeparator:
-      return 'Secondary Separator'
+      return i18n.Text('Secondary Separator')
     case Type.PoolSeparator:
-      return 'Pool Separator'
+      return i18n.Text('Pool Separator')
     default:
       return Type.String(0)
   }

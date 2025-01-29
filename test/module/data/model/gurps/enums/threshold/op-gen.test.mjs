@@ -1,6 +1,9 @@
 import { Op, LastOp, Ops } from '../../../../../../../module/data/model/gurps/enums/threshold/op-gen.mjs'
+import { i18n } from '../../../../../../../module/helpers/i18n.mjs'
 
 describe('Op Enum', () => {
+  i18n.Text = jest.fn(text => `test_${text}`)
+
   test('EnsureValid returns valid enum value', () => {
     expect(Op.EnsureValid(Op.HalveMove)).toBe(Op.HalveMove)
     expect(Op.EnsureValid(Op.HalveDodge)).toBe(Op.HalveDodge)
@@ -17,19 +20,19 @@ describe('Op Enum', () => {
   })
 
   test('String returns correct string for enum value', () => {
-    expect(Op.String(Op.Unknown)).toBe('Unknown')
-    expect(Op.String(Op.HalveMove)).toBe('Halve Move')
-    expect(Op.String(Op.HalveDodge)).toBe('Halve Dodge')
-    expect(Op.String(Op.HalveST)).toBe('Halve Strength')
-    expect(Op.String(999)).toBe('Unknown')
+    expect(Op.String(Op.Unknown)).toBe('test_Unknown')
+    expect(Op.String(Op.HalveMove)).toBe('test_Halve Move')
+    expect(Op.String(Op.HalveDodge)).toBe('test_Halve Dodge')
+    expect(Op.String(Op.HalveST)).toBe('test_Halve Strength')
+    expect(Op.String(999)).toBe('test_Unknown')
   })
 
   test('AltString returns correct alternate string for enum value', () => {
-    expect(Op.AltString(Op.Unknown)).toBe('Unknown')
-    expect(Op.AltString(Op.HalveMove)).toBe('Halve Move (round up)')
-    expect(Op.AltString(Op.HalveDodge)).toBe('Halve Dodge (round up)')
-    expect(Op.AltString(Op.HalveST)).toBe('Halve Strength (round up; does not affect HP and damage)')
-    expect(Op.AltString(999)).toBe('Unknown')
+    expect(Op.AltString(Op.Unknown)).toBe('test_Unknown')
+    expect(Op.AltString(Op.HalveMove)).toBe('test_Halve Move (round up)')
+    expect(Op.AltString(Op.HalveDodge)).toBe('test_Halve Dodge (round up)')
+    expect(Op.AltString(Op.HalveST)).toBe('test_Halve Strength (round up; does not affect HP and damage)')
+    expect(Op.AltString(999)).toBe('test_Unknown')
   })
 
   test('MarshalText returns correct key for enum value', () => {
