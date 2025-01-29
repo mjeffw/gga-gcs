@@ -1,5 +1,6 @@
 import { Placement } from './enums/attribute/placement_gen.mjs'
 import { Type } from './enums/attribute/type_gen.mjs'
+import { PoolThreshold } from './pool-threshold.mjs'
 import { SkillID, ParryID, BlockID, SizeModifierID, sanitizeID } from './ids.mjs'
 
 const AttributeKind = {
@@ -52,13 +53,13 @@ class AttributeDef {
     const attributeDef = new AttributeDef(
       parsedData.id,
       Type.UnmarshalText(parsedData.type),
-      parsedData?.placement ? Placement.UnmarshalText(parsedData.placement) : Placement.Automatic,
+      Placement.UnmarshalJSON(parsedData.placement ?? ''),
       parsedData.name,
       parsedData?.full_name,
       parsedData?.attribute_base,
       parsedData?.cost_per_point,
       parsedData?.cost_adj_percent_per_sm,
-      parsedData?.thresholds,
+      parsedData?.thresholds ? PoolThreshold.UnmarshalJSON(parsedData?.thresholds) : undefined,
     )
     for (let threshold of this?.thresholds ?? []) {
       threshold.expression = threshold.expression.replace(/\$self/g, `$${attributeDef.defID}`)
@@ -90,7 +91,7 @@ class AttributeDef {
   }
 
   // ResolveFullName returns the full name, using the short name if full name is empty.
-  resolveFullName() {
+  ResolveFullName() {
     return !!this.fullName ? this.fullName : this.name
   }
 }

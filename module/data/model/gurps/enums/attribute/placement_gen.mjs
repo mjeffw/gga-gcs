@@ -55,12 +55,12 @@ Placement.String = function (enumValue) {
 }
 
 // MarshalText implements the encoding.TextMarshaler interface.
-Placement.MarshalText = function (enumValue) {
+Placement.MarshalJSON = function (enumValue) {
   return Buffer.from(Placement.Key(enumValue))
 }
 
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
-Placement.UnmarshalText = function (text) {
+Placement.UnmarshalJSON = function (text) {
   return Placement.ExtractPlacement(text.toString())
 }
 

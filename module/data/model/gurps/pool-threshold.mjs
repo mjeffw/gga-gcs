@@ -10,7 +10,7 @@ type PoolThresholdData struct {
 }
 */
 
-class PoolThreshold {
+export default class PoolThreshold {
   constructor(state, expression, explanation, ops, keyPrefix) {
     this.state = state
     this.expression = expression
@@ -103,21 +103,21 @@ class PoolThreshold {
     return this.ops.includes(op)
   }
 
-  addOp(op) {
+  AddOp(op) {
     if (!this.ops.includes(op)) {
       this.ops.push(op)
       this.ops.sort()
     }
   }
 
-  removeOp(op) {
+  RemoveOp(op) {
     const index = this.ops.indexOf(op)
     if (index !== -1) {
       this.ops.splice(index, 1)
     }
   }
 
-  hash(h) {
+  Hash(h) {
     h.update(this.state)
     h.update(this.expression)
     h.update(this.explanation)
@@ -127,9 +127,7 @@ class PoolThreshold {
     }
   }
 
-  toString() {
+  String() {
     return this.state
   }
 }
-
-export default PoolThreshold

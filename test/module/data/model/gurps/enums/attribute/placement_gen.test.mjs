@@ -26,18 +26,18 @@ describe('Placement Enum', () => {
   })
 
   test('marshalText should return correct buffer for enum value', () => {
-    expect(Placement.MarshalText(Placement.Automatic)).toEqual(Buffer.from('automatic'))
-    expect(Placement.MarshalText(Placement.Primary)).toEqual(Buffer.from('primary'))
-    expect(Placement.MarshalText(Placement.Secondary)).toEqual(Buffer.from('secondary'))
-    expect(Placement.MarshalText(Placement.Hidden)).toEqual(Buffer.from('hidden'))
+    expect(Placement.MarshalJSON(Placement.Automatic)).toEqual(Buffer.from('automatic'))
+    expect(Placement.MarshalJSON(Placement.Primary)).toEqual(Buffer.from('primary'))
+    expect(Placement.MarshalJSON(Placement.Secondary)).toEqual(Buffer.from('secondary'))
+    expect(Placement.MarshalJSON(Placement.Hidden)).toEqual(Buffer.from('hidden'))
   })
 
   test('unmarshalText should return correct enum value for text', () => {
-    expect(Placement.UnmarshalText(Buffer.from('automatic'))).toBe(Placement.Automatic)
-    expect(Placement.UnmarshalText(Buffer.from('primary'))).toBe(Placement.Primary)
-    expect(Placement.UnmarshalText(Buffer.from('secondary'))).toBe(Placement.Secondary)
-    expect(Placement.UnmarshalText(Buffer.from('hidden'))).toBe(Placement.Hidden)
-    expect(Placement.UnmarshalText(Buffer.from('unknown'))).toBe(0)
+    expect(Placement.UnmarshalJSON(Buffer.from('automatic'))).toBe(Placement.Automatic)
+    expect(Placement.UnmarshalJSON(Buffer.from('primary'))).toBe(Placement.Primary)
+    expect(Placement.UnmarshalJSON(Buffer.from('secondary'))).toBe(Placement.Secondary)
+    expect(Placement.UnmarshalJSON(Buffer.from('hidden'))).toBe(Placement.Hidden)
+    expect(Placement.UnmarshalJSON(Buffer.from('unknown'))).toBe(0)
   })
 
   test('extractPlacement should return correct enum value for string', () => {

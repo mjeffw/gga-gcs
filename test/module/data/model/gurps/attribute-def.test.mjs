@@ -52,7 +52,7 @@ describe('AttributeDef', () => {
       order,
       keyPrefix,
     )
-    expect(attributeDef.resolveFullName()).toBe('Name')
+    expect(attributeDef.ResolveFullName()).toBe('Name')
   })
 
   it('should resolve Full Name if blank', () => {
@@ -69,7 +69,7 @@ describe('AttributeDef', () => {
       order,
       keyPrefix,
     )
-    expect(attributeDef.resolveFullName()).toBe('Name')
+    expect(attributeDef.ResolveFullName()).toBe('Name')
   })
 
   describe('deserialize', () => {
