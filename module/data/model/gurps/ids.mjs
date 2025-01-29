@@ -19,7 +19,7 @@ const TechniqueID = 'technique'
 const ThrowingStrengthID = 'throwing_st'
 const TorsoID = 'torso'
 
-function sanitizeID(id, permitLeadingDigits, ...reserved) {
+function SanitizeID(id, permitLeadingDigits, ...reserved) {
   let buffer = ''
   for (let ch of id) {
     if (ch >= 'A' && ch <= 'Z') {
@@ -72,5 +72,5 @@ export {
   ThrowingStrengthID,
   TorsoID,
   containerKeyPostfix,
-  sanitizeID,
+  SanitizeID,
 }

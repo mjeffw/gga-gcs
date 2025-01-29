@@ -1,7 +1,7 @@
 import { Placement } from './enums/attribute/placement_gen.mjs'
 import { Type } from './enums/attribute/type_gen.mjs'
 import { PoolThreshold } from './pool-threshold.mjs'
-import { SkillID, ParryID, BlockID, SizeModifierID, sanitizeID } from './ids.mjs'
+import { SkillID, ParryID, BlockID, SizeModifierID, SanitizeID } from './ids.mjs'
 
 const AttributeKind = {
   PrimaryAttrKind: 0,
@@ -82,7 +82,7 @@ class AttributeDef {
   // SetID sets the ID, sanitizing it in the process (i.e. it may be changed from what you set -- read it back if you want
   // to be sure of what it gets set to.
   set ID(value) {
-    this._ID = sanitizeID(value, false, ...ReservedIDs)
+    this._ID = SanitizeID(value, false, ...ReservedIDs)
   }
 
   // ID returns the ID.
