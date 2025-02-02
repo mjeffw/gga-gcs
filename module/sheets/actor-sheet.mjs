@@ -26,6 +26,7 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(sheets.Acto
       deleteDoc: this._deleteDoc,
       toggleEffect: this._toggleEffect,
       roll: this._onRoll,
+      createAttribute: this._createAttribute,
     },
     // Custom property that's merged into `this.options`
     dragDrop: [{ dragSelector: '[data-drag]', dropSelector: null }],
@@ -139,6 +140,25 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(sheets.Acto
         break
     }
     return context
+  }
+
+  // Add custom header buttons
+  _getHeaderControls() {
+    let buttons = super._getHeaderControls()
+    buttons = [
+      {
+        label: 'My Dialog',
+        class: 'my-dialog-button',
+        icon: 'fas fa-info-circle',
+        onclick: () => this._openMyDialog(),
+      },
+      ...buttons,
+    ]
+    return buttons
+  }
+
+  _openMyDialog() {
+    console.log('My Dialog')
   }
 
   /**
@@ -352,6 +372,22 @@ export class GgaGcsActorSheet extends api.HandlebarsApplicationMixin(sheets.Acto
 
     // Finally, create the embedded document!
     await docCls.create(docData, { parent: this.actor })
+  }
+
+  static async _createAttribute(event, target) {
+    this.actor.update({
+      'system.settings.attributes': [
+        {
+          id: 'st',
+          type: 'integer',
+          name: 'ST',
+          full_name: 'Strength',
+          attribute_base: '10',
+          cost_per_point: 10,
+          cost_adj_percent_per_sm: 10,
+        },
+      ],
+    })
   }
 
   /**
