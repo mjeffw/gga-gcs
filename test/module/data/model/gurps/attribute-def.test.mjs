@@ -1,6 +1,6 @@
-import { AttributeDef } from '../../../../../module/data/model/gurps/attribute-def.mjs'
-import { Type } from '../../../../../module/data/model/gurps/enums/attribute/type_gen.mjs'
-import { Placement } from '../../../../../module/data/model/gurps/enums/attribute/placement_gen.mjs'
+import { AttributeDef } from '../../../../../lib/gcs/model/gurps/attribute-def.mjs'
+import { Placement } from '../../../../../lib/gcs/model/gurps/enums/attribute/placement_gen.mjs'
+import { Type } from '../../../../../lib/gcs/model/gurps/enums/attribute/type_gen.mjs'
 
 describe('AttributeDef', () => {
   const attributeDefData = {

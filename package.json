@@ -4,7 +4,7 @@
   "description": "CSS compiler for the GgaGcs system",
   "scripts": {
     "test": "jest --coverage",
-    "tdd": "jest --coverage",
+    "tdd": "jest --watchAll --coverage",
     "build": "sass src/scss/gga-gcs.scss css/gga-gcs.css --style=expanded --no-source-map",
     "watch": "sass src/scss/gga-gcs.scss css/gga-gcs.css --style=expanded --source-map --watch"
   },

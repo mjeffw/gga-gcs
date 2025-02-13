@@ -1,5 +1,5 @@
-import { Type } from '../../../../../../../module/data/model/gurps/enums/attribute/type_gen.mjs'
-import { i18n } from '../../../../../../../module/helpers/i18n.mjs'
+import { Type } from '../../../../../../../lib/gcs/model/gurps/enums/attribute/type_gen.mjs'
+import { i18n } from '../../../../../../../lib/toolbox/i18n.mjs'
 
 describe('Type Enum', () => {
   i18n.Text = jest.fn(text => `test_${text}`)

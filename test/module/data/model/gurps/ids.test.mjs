@@ -1,4 +1,4 @@
-import { SanitizeID } from '../../../../../module/data/model/gurps/ids.mjs'
+import { SanitizeID } from '../../../../../lib/gcs/model/gurps/ids.mjs'
 
 describe('ids module', () => {
   describe('sanitizeID', () => {

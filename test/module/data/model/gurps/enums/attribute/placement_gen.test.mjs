@@ -1,4 +1,4 @@
-import { Placement } from '../../../../../../../module/data/model/gurps/enums/attribute/placement_gen.mjs'
+import { Placement } from '../../../../../../../lib/gcs/model/gurps/enums/attribute/placement_gen.mjs'
 
 describe('Placement Enum', () => {
   test('ensureValid should return valid enum value', () => {

@@ -1,5 +1,5 @@
-import { Op, LastOp, Ops } from '../../../../../../../module/data/model/gurps/enums/threshold/op-gen.mjs'
-import { i18n } from '../../../../../../../module/helpers/i18n.mjs'
+import { Op } from '../../../../../../../lib/gcs/model/gurps/enums/threshold/op-gen.mjs'
+import { i18n } from '../../../../../../../lib/toolbox/i18n.mjs'
 
 describe('Op Enum', () => {
   i18n.Text = jest.fn(text => `test_${text}`)

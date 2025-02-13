@@ -1,5 +1,5 @@
-import PoolThreshold from '../../../../../module/data/model/gurps/pool-threshold.mjs'
-import { Op } from '../../../../../module/data/model/gurps/enums/threshold/op-gen.mjs'
+import { Op } from '../../../../../lib/gcs/model/gurps/enums/threshold/op-gen.mjs'
+import PoolThreshold from '../../../../../lib/gcs/model/gurps/pool-threshold.mjs'
 
 describe('PoolThreshold', () => {
   describe('fromJSON', () => {
